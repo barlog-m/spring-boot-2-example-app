@@ -1,14 +1,16 @@
 package app.customer
 
 import org.springframework.stereotype.Service
+import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
 
 @Service
-class CustomerService(
+open class CustomerService(
 	private val repository: CustomerRepository
 ) {
-	fun findBy(name: String) = repository.findBy(name)
+	open fun findBy(name: String): Flux<Customer> = repository.findBy(name)
 
-	fun save(customer: Customer) = repository.save(customer)
+	open fun save(customer: Customer): Mono<Customer> = repository.save(customer)
 
-	fun delete(id: String) = repository.deleteById(id)
+	open fun deleteById(id: String): Mono<Void> = repository.deleteById(id)
 }
