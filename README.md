@@ -21,8 +21,3 @@ gradle run
 ```
 gradle build
 ```
-
-### Checkstyle and FindBugs
-```
-gradle check
-```
