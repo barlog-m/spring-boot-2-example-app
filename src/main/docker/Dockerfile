@@ -2,7 +2,7 @@ FROM openjdk:9.0.1-jre-slim
 
 MAINTAINER barlog@tanelorn.li
 
-ARG JAVA_OPTS
+ARG JAVA_OPTS="-XX:-TieredCompilation -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=1"
 ARG PORT=8080
 
 ENV JAVA_OPTS $JAVA_OPTS
