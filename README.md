@@ -7,17 +7,12 @@ Example [Spring Boot 2](http://projects.spring.io/spring-boot) application with
 
 WebFlux CRUD with Reactive MongoDB client
 
-### Run without build jar (with reloadable resources)
+### Run
 ```
 gradle bootRun
 ```
 
-### Run
+### Build fat jar
 ```
-gradle run
-```
-
-### Create executable jar with dependencies
-```
-gradle build
+gradle bootJar
 ```
