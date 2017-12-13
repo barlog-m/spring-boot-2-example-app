@@ -8,6 +8,9 @@ spring:
       uri: mongodb://localhost:27017
       database: foo
 
+server:
+  port: 8080
+
 logging:
   pattern:
     level: "%clr(%-5p)"

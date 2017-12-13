@@ -2,7 +2,7 @@ buildscript {
 	ext {
 		kotlinVer = '1.2.0'
 		springBootVer = '2.0.0.M7'
-		kotlinLoggingVer = '1.4.7'
+		kotlinLoggingVer = '1.4.8'
 
 		propdepsPluginVer = '0.0.10.RELEASE'
 		versionPluginVer = '0.17.0'
@@ -10,7 +10,7 @@ buildscript {
 
 		junitJupiterVer = '5.0.2'
 		junitPlatformVer = '1.0.2'
-		testContainersVer = '1.4.3'
+		testContainersVer = '1.5.0'
 	}
 
 	repositories {
@@ -89,8 +89,9 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
 }
 
 bootJar {
-	mustRunAfter clean
+	mustRunAfter tasks.clean
 	mainClassName = 'app.AppKt'
+	archiveName 'app.jar'
 }
 
 junitPlatform {
@@ -105,14 +106,14 @@ task wrapper(type: Wrapper) {
 // https://github.com/palantir/gradle-docker
 // gradle docker
 docker {
-	dependsOn bootJar
+	dependsOn tasks.bootJar
 	name 'app'
 	tags 'latest'
-	files bootJar.outputs
+	files tasks.bootJar.outputs
 	dockerfile file('src/main/docker/Dockerfile')
 	buildArgs([
 		JAVA_OPTS: '-XX:-TieredCompilation -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=1',
-		PORT     : '8081'
+		PORT     : '8080'
 	])
 	pull true
 }

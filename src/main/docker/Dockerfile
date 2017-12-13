@@ -1,18 +1,18 @@
-FROM anapsix/alpine-java:8_jdk_unlimited
+FROM openjdk:9.0.1-jre-slim
 
 MAINTAINER barlog@tanelorn.li
 
 ARG JAVA_OPTS
 ARG PORT=8080
 
-ENV JAVA_OPTS \$JAVA_OPTS
-ENV PORT \$PORT
+ENV JAVA_OPTS $JAVA_OPTS
+ENV PORT $PORT
 
-EXPOSE \$PORT
+EXPOSE $PORT
 
 COPY app.jar /
 
-CMD java \$JAVA_OPTS \
+CMD java $JAVA_OPTS \
 	-Djava.security.egd=file:/dev/./urandom \
 	-jar /app.jar \
-	--port=\$PORT
+	--server.port=$PORT
