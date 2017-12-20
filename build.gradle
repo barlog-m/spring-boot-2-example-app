@@ -1,6 +1,6 @@
 buildscript {
 	ext {
-		kotlinVer = '1.2.0'
+		kotlinVer = '1.2.10'
 		springBootVer = '2.0.0.M7'
 		kotlinLoggingVer = '1.4.8'
 
@@ -9,7 +9,7 @@ buildscript {
 
 		junitJupiterVer = '5.0.2'
 		junitPlatformVer = '1.0.2'
-		testContainersVer = '1.5.0'
+		testContainersVer = '1.5.1'
 	}
 
 	repositories {
