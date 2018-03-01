@@ -1,4 +1,4 @@
-FROM openjdk:9.0.4-jre-slim
+FROM openjdk:9-jre-slim
 
 MAINTAINER barlog@tanelorn.li
 

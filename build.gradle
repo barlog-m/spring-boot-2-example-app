@@ -90,6 +90,10 @@ bootJar {
 	archiveName 'app.jar'
 }
 
+tasks.withType(Test) {
+	maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
+}
+
 test {
 	useJUnitPlatform {
 		includeEngines 'junit-jupiter'
