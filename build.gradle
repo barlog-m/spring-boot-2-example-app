@@ -43,7 +43,7 @@ repositories {
 }
 
 dependencies {
-	compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVer"
+	compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVer"
 	compile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVer"
 
 	compile "io.github.microutils:kotlin-logging:$kotlinLoggingVer"
