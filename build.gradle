@@ -95,11 +95,6 @@ test {
 	useJUnitPlatform {
 		includeEngines 'junit-jupiter'
 	}
-	doFirst {
-		jvmArgs = [
-			'--add-modules', 'java.xml.ws.annotation'
-		]
-	}
 }
 
 task wrapper(type: Wrapper) {
