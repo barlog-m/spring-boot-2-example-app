@@ -9,26 +9,26 @@ import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
 class CustomerServiceTest {
-	private val repository = mock(CustomerRepository::class.java)
-	private val customer = generateCustomer()
+    private val repository = mock(CustomerRepository::class.java)
+    private val customer = generateCustomer()
 
-	@Test
-	fun findBy() {
-		given(repository.findBy(customer.name)).willReturn(Flux.just(customer))
-		repository.findBy(customer.name)
-		verify(repository, times(1)).findBy(customer.name)
-	}
+    @Test
+    fun findBy() {
+        given(repository.findBy(customer.name)).willReturn(Flux.just(customer))
+        repository.findBy(customer.name)
+        verify(repository, times(1)).findBy(customer.name)
+    }
 
-	@Test
-	fun save() {
-		given(repository.save(customer)).willReturn(Mono.just(customer))
-		repository.save(customer)
-		verify(repository, times(1)).save(customer)
-	}
+    @Test
+    fun save() {
+        given(repository.save(customer)).willReturn(Mono.just(customer))
+        repository.save(customer)
+        verify(repository, times(1)).save(customer)
+    }
 
-	@Test
-	fun deleteById() {
-		repository.deleteById(customer.id)
-		verify(repository, times(1)).deleteById(customer.id)
-	}
+    @Test
+    fun deleteById() {
+        repository.deleteById(customer.id)
+        verify(repository, times(1)).deleteById(customer.id)
+    }
 }

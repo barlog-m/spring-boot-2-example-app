@@ -7,6 +7,6 @@ import org.springframework.boot.builder.SpringApplicationBuilder
 open class App
 
 fun main(vararg args: String) {
-	SpringApplicationBuilder(App::class.java)
-		.registerShutdownHook(true).run(*args)
+    SpringApplicationBuilder(App::class.java)
+        .registerShutdownHook(true).run(*args)
 }

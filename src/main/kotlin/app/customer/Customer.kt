@@ -7,9 +7,9 @@ import java.time.LocalDate
 
 @Document
 data class Customer(
-	@Id val id: String,
-	val name: String,
-	val balance: BigDecimal,
-	val lastWithdraw: LocalDate? = null,
-	val lastDeposit: LocalDate
+    @Id val id: String,
+    val name: String,
+    val balance: BigDecimal,
+    val lastWithdraw: LocalDate? = null,
+    val lastDeposit: LocalDate
 )

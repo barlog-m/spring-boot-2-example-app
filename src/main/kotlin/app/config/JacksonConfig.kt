@@ -11,17 +11,17 @@ import javax.annotation.PostConstruct
 
 @Configuration
 open class JacksonConfig {
-	@Autowired
-	private lateinit var mapper: ObjectMapper
+    @Autowired
+    private lateinit var mapper: ObjectMapper
 
-	@Bean
-	open fun kotlinModule() = KotlinModule()
+    @Bean
+    open fun kotlinModule() = KotlinModule()
 
-	@Bean
-	open fun javaTimeModule() = JavaTimeModule()
+    @Bean
+    open fun javaTimeModule() = JavaTimeModule()
 
-	@PostConstruct
-	open fun init() {
-		mapper.dateFormat = StdDateFormat()
-	}
+    @PostConstruct
+    open fun init() {
+        mapper.dateFormat = StdDateFormat()
+    }
 }

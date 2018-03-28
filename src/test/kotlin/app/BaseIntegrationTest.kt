@@ -16,40 +16,40 @@ import org.testcontainers.containers.GenericContainer
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(
-	classes = [ITConfig::class],
-	webEnvironment = WebEnvironment.NONE
+    classes = [ITConfig::class],
+    webEnvironment = WebEnvironment.NONE
 )
 @ActiveProfiles("test")
 @ContextConfiguration(initializers = [BaseIntegrationTest.Initializer::class])
 abstract class BaseIntegrationTest {
-	companion object {
-		init {
-			System.setProperty("io.netty.noUnsafe", true.toString())
-		}
+    companion object {
+        init {
+            System.setProperty("io.netty.noUnsafe", true.toString())
+        }
 
-		private class KGenericContainer(imageName: String) :
-			GenericContainer<KGenericContainer>(imageName)
+        private class KGenericContainer(imageName: String) :
+            GenericContainer<KGenericContainer>(imageName)
 
-		private const val MONGO_PORT = 27017
+        private const val MONGO_PORT = 27017
 
-		private val mongoContainer: KGenericContainer =
-			KGenericContainer("mongo:latest")
-				.withExposedPorts(MONGO_PORT)
-	}
+        private val mongoContainer: KGenericContainer =
+            KGenericContainer("mongo:latest")
+                .withExposedPorts(MONGO_PORT)
+    }
 
-	class Initializer : ApplicationContextInitializer<ConfigurableApplicationContext> {
-		override fun initialize(context: ConfigurableApplicationContext) {
-			mongoContainer.start()
+    class Initializer : ApplicationContextInitializer<ConfigurableApplicationContext> {
+        override fun initialize(context: ConfigurableApplicationContext) {
+            mongoContainer.start()
 
-			println("mongo port: ${mongoContainer.getMappedPort(MONGO_PORT)}")
+            println("mongo port: ${mongoContainer.getMappedPort(MONGO_PORT)}")
 
-			TestPropertyValues.of(
-				"spring.data.mongodb.uri=mongodb://localhost:${mongoContainer.getMappedPort(MONGO_PORT)}")
-				.applyTo(context)
+            TestPropertyValues.of(
+                "spring.data.mongodb.uri=mongodb://localhost:${mongoContainer.getMappedPort(MONGO_PORT)}")
+                .applyTo(context)
 
-			context.addApplicationListener(ApplicationListener<ContextStoppedEvent> {
-				mongoContainer.stop()
-			})
-		}
-	}
+            context.addApplicationListener(ApplicationListener<ContextStoppedEvent> {
+                mongoContainer.stop()
+            })
+        }
+    }
 }

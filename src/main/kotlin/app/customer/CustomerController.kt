@@ -16,24 +16,24 @@ import reactor.core.publisher.Mono
 @RestController
 @RequestMapping("/customer")
 class CustomerController(
-	private val service: CustomerService
+    private val service: CustomerService
 ) {
-	@PostMapping(consumes = [MediaType.APPLICATION_JSON_UTF8_VALUE])
-	fun create(@RequestBody customer: Customer): Mono<Void> =
-		service.save(customer).then()
+    @PostMapping(consumes = [MediaType.APPLICATION_JSON_UTF8_VALUE])
+    fun create(@RequestBody customer: Customer): Mono<Void> =
+        service.save(customer).then()
 
-	@GetMapping(
-		path = ["/by"],
-		produces = [MediaType.APPLICATION_JSON_UTF8_VALUE]
-	)
-	fun readByName(@RequestParam name: String): Flux<Customer> =
-		service.findBy(name)
+    @GetMapping(
+        path = ["/by"],
+        produces = [MediaType.APPLICATION_JSON_UTF8_VALUE]
+    )
+    fun readByName(@RequestParam name: String): Flux<Customer> =
+        service.findBy(name)
 
-	@PutMapping(consumes = [MediaType.APPLICATION_JSON_UTF8_VALUE])
-	fun update(@RequestBody customer: Customer): Mono<Void> =
-		service.save(customer).then()
+    @PutMapping(consumes = [MediaType.APPLICATION_JSON_UTF8_VALUE])
+    fun update(@RequestBody customer: Customer): Mono<Void> =
+        service.save(customer).then()
 
-	@DeleteMapping("/{id}")
-	fun delete(@PathVariable id: String): Mono<Void> =
-		service.deleteById(id).then()
+    @DeleteMapping("/{id}")
+    fun delete(@PathVariable id: String): Mono<Void> =
+        service.deleteById(id).then()
 }
