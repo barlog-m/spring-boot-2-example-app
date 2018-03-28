@@ -1,15 +1,15 @@
 buildscript {
 	ext {
-		kotlinVer = '1.2.21'
+		kotlinVer = '1.2.31'
 		springBootVer = '2.0.0.RELEASE'
-		kotlinLoggingVer = '1.5.3'
+		kotlinLoggingVer = '1.5.4'
+
+		junitJupiterVer = '5.1.0'
+		testContainersVer = '1.6.1-gradle'
 
 		propdepsPluginVer = '0.0.10.RELEASE'
 		versionPluginVer = '0.17.0'
-
-		junitJupiterVer = '5.1.0'
-		junitPlatformVer = '1.1.0'
-		testContainersVer = '1.6.0'
+		dockerPluginVer = '0.19.2'
 	}
 
 	repositories {
@@ -20,10 +20,10 @@ buildscript {
 	dependencies {
 		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVer"
 		classpath "org.springframework.boot:spring-boot-gradle-plugin:$springBootVer"
-		classpath "org.junit.platform:junit-platform-gradle-plugin:$junitPlatformVer"
 		classpath "io.spring.gradle:propdeps-plugin:$propdepsPluginVer"
 		// gradle dependencyUpdates -Drevision=release
 		classpath "com.github.ben-manes:gradle-versions-plugin:$versionPluginVer"
+		classpath "gradle.plugin.com.palantir.gradle.docker:gradle-docker:$dockerPluginVer"
 	}
 }
 
@@ -34,8 +34,8 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'propdeps'
 apply plugin: 'propdeps-idea'
-apply plugin: 'org.junit.platform.gradle.plugin'
 apply plugin: 'com.github.ben-manes.versions'
+apply plugin: 'com.palantir.docker'
 
 repositories {
 	jcenter()
@@ -60,7 +60,6 @@ dependencies {
 
 	testCompile "org.junit.jupiter:junit-jupiter-api:$junitJupiterVer"
 	testRuntime "org.junit.jupiter:junit-jupiter-engine:$junitJupiterVer"
-	testRuntime "org.junit.platform:junit-platform-launcher:$junitPlatformVer"
 
 	testCompile "org.testcontainers:testcontainers:$testContainersVer"
 }
@@ -68,8 +67,8 @@ dependencies {
 group = 'app'
 version = '0.1-SNAPSHOT'
 
-sourceCompatibility = JavaVersion.VERSION_1_9
-targetCompatibility = JavaVersion.VERSION_1_9
+sourceCompatibility = JavaVersion.VERSION_1_10
+targetCompatibility = JavaVersion.VERSION_1_10
 
 tasks.withType(JavaCompile) {
 	options.fork = true
@@ -105,24 +104,19 @@ task wrapper(type: Wrapper) {
 	distributionType = Wrapper.DistributionType.ALL
 }
 
-task docker(dependsOn: tasks.bootJar) {
-	def tag = 'app'
-	def workDir = file("$buildDir/docker")
-	def dockerFile = file('src/main/docker/Dockerfile')
-	def inputDir = file("$buildDir/libs")
-
-	doLast {
-		copy {
-			from inputDir
-			from dockerFile
-			into workDir
-		}
-
-		exec {
-			workingDir workDir
-			commandLine 'docker', 'build', '--pull', '-t', tag, '.'
-		}
-	}
+// https://github.com/palantir/gradle-docker
+// gradle docker
+docker {
+	dependsOn tasks.bootJar
+	name 'app'
+	tags 'latest'
+	files tasks.bootJar.outputs
+	dockerfile file('src/main/docker/Dockerfile')
+	buildArgs([
+		JAVA_OPTS: '-XX:-TieredCompilation -XX:MaxRAMFraction=1',
+		PORT     : '8080'
+	])
+	pull true
 }
 
 task stage(dependsOn: ['build', 'clean'])

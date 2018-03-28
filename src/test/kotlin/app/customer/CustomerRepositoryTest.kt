@@ -22,7 +22,7 @@ class CustomerRepositoryTest : BaseIntegrationTest() {
 		val result = repository
 			.findBy(customer.name)
 			.collectList()
-			.block()
+			.block()!!
 
 		assertTrue(result.isNotEmpty())
 
@@ -72,7 +72,7 @@ class CustomerRepositoryTest : BaseIntegrationTest() {
 
 		val savedCustomer = repository
 			.findById(customer.id)
-			.block()
+			.block()!!
 
 		assertEquals(customer.id, savedCustomer.id)
 		assertEquals("Jane Doe", savedCustomer.name)
@@ -98,7 +98,7 @@ class CustomerRepositoryTest : BaseIntegrationTest() {
 		val result = repository
 			.findBy(customer.name)
 			.collectList()
-			.block()
+			.block()!!
 
 		assertTrue(result.isEmpty())
 	}
