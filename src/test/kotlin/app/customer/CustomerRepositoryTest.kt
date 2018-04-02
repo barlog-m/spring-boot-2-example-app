@@ -1,10 +1,9 @@
 package app.customer
 
 import app.BaseIntegrationTest
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import reactor.test.StepVerifier
 
 class CustomerRepositoryTest : BaseIntegrationTest() {
     @Autowired
@@ -14,20 +13,19 @@ class CustomerRepositoryTest : BaseIntegrationTest() {
 
     @Test
     fun findByName() {
-        repository
-            .save(customer)
-            .then()
-            .block()
+        StepVerifier.create(
+            repository
+                .save(customer)
 
-        val result = repository
-            .findBy(customer.name)
-            .collectList()
-            .block()!!
-
-        assertTrue(result.isNotEmpty())
-
-        val readCustomer = result.first { it.id == customer.id }
-        assertEquals(customer, readCustomer)
+                .then(repository
+                    .findBy(customer.name)
+                    .collectList()
+                ))
+            .assertNext {
+                it.isNotEmpty() &&
+                    it.first { it.id == customer.id } != null
+            }
+            .verifyComplete()
 
         repository
             .delete(customer)
@@ -37,16 +35,15 @@ class CustomerRepositoryTest : BaseIntegrationTest() {
 
     @Test
     fun save() {
-        repository
-            .save(customer)
-            .then()
-            .block()
-
-        val savedCustomer = repository
-            .findById(customer.id)
-            .block()
-
-        assertEquals(customer, savedCustomer)
+        StepVerifier.create(
+            repository
+                .save(customer)
+                .then(
+                    repository
+                        .findById(customer.id)
+                ))
+            .expectNext(customer)
+            .verifyComplete()
 
         repository
             .delete(customer)
@@ -56,26 +53,25 @@ class CustomerRepositoryTest : BaseIntegrationTest() {
 
     @Test
     fun update() {
-        repository
-            .save(customer)
-            .then()
-            .block()
-
-        val updatedCustomer = customer.copy(
-            name = "Jane Doe"
-        )
-
-        repository
-            .save(updatedCustomer)
-            .then()
-            .block()
-
-        val savedCustomer = repository
-            .findById(customer.id)
-            .block()!!
-
-        assertEquals(customer.id, savedCustomer.id)
-        assertEquals("Jane Doe", savedCustomer.name)
+        val newName = "Jane Doe"
+        StepVerifier.create(
+            repository
+                .save(customer)
+                .map {
+                    it.copy(
+                        name = newName
+                    )
+                }
+                .flatMap {
+                    repository.save(it).thenReturn(it)
+                }
+                .flatMap {
+                    repository
+                        .findById(customer.id)
+                        .thenReturn(it.name)
+                })
+            .expectNext(newName)
+            .verifyComplete()
 
         repository
             .deleteById(customer.id)
@@ -85,21 +81,19 @@ class CustomerRepositoryTest : BaseIntegrationTest() {
 
     @Test
     fun delete() {
-        repository
-            .save(customer)
-            .then()
-            .block()
-
-        repository
-            .delete(customer)
-            .then()
-            .block()
-
-        val result = repository
-            .findBy(customer.name)
-            .collectList()
-            .block()!!
-
-        assertTrue(result.isEmpty())
+        StepVerifier.create(
+            repository
+                .save(customer)
+                .then(
+                    repository
+                        .delete(customer)
+                )
+                .then(
+                    repository
+                        .findBy(customer.name)
+                        .collectList()
+                ))
+            .assertNext { it.isEmpty() }
+            .verifyComplete()
     }
 }
