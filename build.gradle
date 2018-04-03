@@ -7,6 +7,7 @@ buildscript {
 
         junitJupiterVer = '5.1.0'
         testContainersVer = '1.6.1-gradle'
+        jfairyVer = '0.5.9'
 
         propdepsPluginVer = '0.0.10.RELEASE'
         versionPluginVer = '0.17.0'
@@ -65,6 +66,7 @@ dependencies {
     testCompile "io.projectreactor:reactor-test:$reactorCoreVer"
 
     testCompile "org.testcontainers:testcontainers:$testContainersVer"
+    testCompile "io.codearte.jfairy:jfairy:$jfairyVer"
 }
 
 group = 'app'
