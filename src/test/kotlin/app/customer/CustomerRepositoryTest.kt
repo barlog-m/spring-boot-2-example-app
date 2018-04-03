@@ -9,62 +9,47 @@ class CustomerRepositoryTest : BaseIntegrationTest() {
     @Autowired
     private lateinit var repository: CustomerRepository
 
-    private val customer = generateCustomer()
 
     @Test
     fun findByName() {
+        val customer = generateCustomer()
+        repository.save(customer).block()
+
         StepVerifier.create(
             repository
-                .save(customer)
-
-                .then(repository
-                    .findBy(customer.name)
-                    .collectList()
-                ))
+                .findBy(customer.name)
+                .collectList())
             .assertNext {
                 it.isNotEmpty() &&
                     it.first { it.id == customer.id } != null
             }
             .verifyComplete()
 
-        repository
-            .delete(customer)
-            .then()
-            .block()
+        repository.delete(customer).block()
     }
 
     @Test
     fun save() {
+        val customer = generateCustomer()
+        repository.save(customer).block()
+
         StepVerifier.create(
             repository
-                .save(customer)
-                .then(
-                    repository
-                        .findById(customer.id)
-                ))
+                .findById(customer.id))
             .expectNext(customer)
             .verifyComplete()
 
-        repository
-            .delete(customer)
-            .then()
-            .block()
+        repository.delete(customer).block()
     }
 
     @Test
     fun update() {
+        val customer = generateCustomer()
+        repository.save(customer).block()
+
         val newName = "Jane Doe"
         StepVerifier.create(
-            repository
-                .save(customer)
-                .map {
-                    it.copy(
-                        name = newName
-                    )
-                }
-                .flatMap {
-                    repository.save(it).thenReturn(it)
-                }
+            repository.save(customer.copy(name = newName))
                 .flatMap {
                     repository
                         .findById(customer.id)
@@ -73,21 +58,17 @@ class CustomerRepositoryTest : BaseIntegrationTest() {
             .expectNext(newName)
             .verifyComplete()
 
-        repository
-            .deleteById(customer.id)
-            .then()
-            .block()
+        repository.deleteById(customer.id).block()
     }
 
     @Test
     fun delete() {
+        val customer = generateCustomer()
+        repository.save(customer).block()
+
         StepVerifier.create(
             repository
-                .save(customer)
-                .then(
-                    repository
-                        .delete(customer)
-                )
+                .delete(customer)
                 .then(
                     repository
                         .findBy(customer.name)
