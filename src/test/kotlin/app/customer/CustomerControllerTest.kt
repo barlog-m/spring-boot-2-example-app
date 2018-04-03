@@ -45,7 +45,7 @@ class CustomerControllerTest {
 
     @Test
     fun readByName() {
-        given(customerService.findBy(customer.name))
+        given(customerService.findByName(customer.name))
             .willReturn(Flux.just(customer))
 
         webClient

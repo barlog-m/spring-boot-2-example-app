@@ -16,7 +16,7 @@ class CustomerRepositoryTest : BaseIntegrationTest() {
 
         StepVerifier.create(
             repository
-                .findBy(customer.name)
+                .findByName(customer.name)
                 .collectList())
             .assertNext {
                 it.isNotEmpty() &&
@@ -70,7 +70,7 @@ class CustomerRepositoryTest : BaseIntegrationTest() {
                 .delete(customer)
                 .then(
                     repository
-                        .findBy(customer.name)
+                        .findByName(customer.name)
                         .collectList()
                 ))
             .assertNext { it.isEmpty() }

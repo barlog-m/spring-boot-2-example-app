@@ -15,9 +15,9 @@ class CustomerServiceTest {
 
     @Test
     fun findBy() {
-        given(repository.findBy(customer.name)).willReturn(Flux.just(customer))
-        service.findBy(customer.name)
-        verify(repository, times(1)).findBy(customer.name)
+        given(repository.findByName(customer.name)).willReturn(Flux.just(customer))
+        service.findByName(customer.name)
+        verify(repository, times(1)).findByName(customer.name)
     }
 
     @Test

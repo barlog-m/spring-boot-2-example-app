@@ -28,7 +28,7 @@ class CustomerController(
         produces = [MediaType.APPLICATION_JSON_UTF8_VALUE]
     )
     fun readByName(@RequestParam name: String): Flux<Customer> =
-        service.findBy(name)
+        service.findByName(name)
 
     @PutMapping(consumes = [MediaType.APPLICATION_JSON_UTF8_VALUE])
     fun update(@RequestBody customer: Customer): Mono<Void> =

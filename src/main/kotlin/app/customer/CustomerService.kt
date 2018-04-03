@@ -9,7 +9,7 @@ import reactor.core.publisher.Mono
 open class CustomerService(
     private val repository: CustomerRepository
 ) {
-    open fun findBy(name: String): Flux<Customer> = repository.findBy(name)
+    open fun findByName(name: String): Flux<Customer> = repository.findByName(name)
 
     open fun save(customer: Customer): Mono<Customer> = repository.save(customer)
 
