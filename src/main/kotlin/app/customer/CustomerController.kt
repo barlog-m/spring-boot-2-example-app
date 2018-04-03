@@ -1,5 +1,6 @@
 package app.customer
 
+import org.bson.types.ObjectId
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -34,6 +35,6 @@ class CustomerController(
         service.save(customer).then()
 
     @DeleteMapping("/{id}")
-    fun delete(@PathVariable id: String): Mono<Void> =
-        service.deleteById(id).then()
+    fun delete(@PathVariable id: ObjectId): Mono<Void> =
+        service.deleteById(id)
 }

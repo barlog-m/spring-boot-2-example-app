@@ -1,5 +1,6 @@
 package app.customer
 
+import org.bson.types.ObjectId
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
@@ -12,5 +13,5 @@ open class CustomerService(
 
     open fun save(customer: Customer): Mono<Customer> = repository.save(customer)
 
-    open fun deleteById(id: String): Mono<Void> = repository.deleteById(id)
+    open fun deleteById(id: ObjectId): Mono<Void> = repository.deleteById(id)
 }
