@@ -9,7 +9,6 @@ class CustomerRepositoryTest : BaseIntegrationTest() {
     @Autowired
     private lateinit var repository: CustomerRepository
 
-
     @Test
     fun findByName() {
         val customer = generateCustomer()
