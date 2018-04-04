@@ -6,12 +6,12 @@ import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
 @Service
-class CustomerService(
+open class CustomerService(
     private val repository: CustomerRepository
 ) {
-    fun findByName(name: String): Flux<Customer> = repository.findByName(name)
+    open fun findByName(name: String): Flux<Customer> = repository.findByName(name)
 
-    fun save(customer: Customer): Mono<Customer> = repository.save(customer)
+    open fun save(customer: Customer): Mono<Customer> = repository.save(customer)
 
-    fun deleteById(id: ObjectId): Mono<Void> = repository.deleteById(id)
+    open fun deleteById(id: ObjectId): Mono<Void> = repository.deleteById(id)
 }
