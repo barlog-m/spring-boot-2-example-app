@@ -1,11 +1,10 @@
 buildscript {
     ext {
         kotlinVer = '1.2.31'
-        springBootVer = '2.0.0.RELEASE'
+        springBootVer = '2.0.1.RELEASE'
         kotlinLoggingVer = '1.5.4'
         reactorCoreVer = '3.1.5.RELEASE'
 
-        junitJupiterVer = '5.1.0'
         testContainersVer = '1.6.1-gradle'
         jfairyVer = '0.5.9'
 
@@ -56,12 +55,10 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-webflux'
     compile 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
 
-    testCompile('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: 'junit', module: 'junit'
-    }
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
 
-    testCompile "org.junit.jupiter:junit-jupiter-api:$junitJupiterVer"
-    testRuntime "org.junit.jupiter:junit-jupiter-engine:$junitJupiterVer"
+    testCompile "org.junit.jupiter:junit-jupiter-api"
+    testRuntime "org.junit.jupiter:junit-jupiter-engine"
 
     testCompile "io.projectreactor:reactor-test:$reactorCoreVer"
 
