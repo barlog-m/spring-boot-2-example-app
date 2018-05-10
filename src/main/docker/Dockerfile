@@ -2,7 +2,7 @@ FROM openjdk:10-jre-slim
 
 LABEL maintainer="barlog@tanelorn.li"
 
-ARG JAVA_OPTS="-XX:-TieredCompilation -XX:MaxRAMFraction=1"
+ARG JAVA_OPTS="-XX:-TieredCompilation"
 ARG PORT=8080
 
 ENV JAVA_OPTS $JAVA_OPTS
