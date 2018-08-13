@@ -1,12 +1,12 @@
-\# macOS
+# macOS
 .DS_Store
 
-\# IDEA
+# IDEA
 .idea/
 out/
 classes/
 *.iml
 
-\# Gradle
+# Gradle
 .gradle/
 build/
