@@ -3,10 +3,10 @@ spring:
   application.name: app
   output.ansi.enabled: always
 
-  data:
-    mongodb:
-      uri: mongodb://localhost:27017
-      database: foo
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+    deserialization:
+      adjust-dates-to-context-time-zone: false
 
 server:
   port: 8080

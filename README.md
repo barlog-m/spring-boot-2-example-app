@@ -9,7 +9,7 @@ WebFlux CRUD with Reactive MongoDB client
 
 ### Run
 ```
-gradle bootRun
+gradle bootRun --spring.profiles.active=dev
 ```
 
 ### Build fat jar

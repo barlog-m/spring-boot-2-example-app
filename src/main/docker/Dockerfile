@@ -5,14 +5,15 @@ LABEL maintainer="barlog@tanelorn.li"
 ARG JAVA_OPTS="-XX:-TieredCompilation"
 ARG PORT=8080
 
-ENV JAVA_OPTS $JAVA_OPTS
-ENV PORT $PORT
+ENV JAVA_OPTS ${JAVA_OPTS}
+ENV PORT ${PORT}
 
-EXPOSE $PORT
+EXPOSE ${PORT}
 
-COPY app.jar /
+ARG JAR_FILE
+COPY ${JAR_FILE} /app.jar
 
-CMD java $JAVA_OPTS \
+CMD java ${JAVA_OPTS} \
 	-Djava.security.egd=file:/dev/./urandom \
 	-jar /app.jar \
-	--server.port=$PORT
+	--server.port=${PORT}

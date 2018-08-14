@@ -4,11 +4,13 @@ services:
   mongo:
     image: mongo:latest
     ports:
-      - "27017:27017"
+    - 27017:27017
+    environment:
+      MONGO_INITDB_DATABASE: app
 
   app:
-    image: app:latest
+    image: reg-service/backend:latest
     ports:
-      - "8080:8080"
+    - 8080:8080
     environment:
-      - SPRING_DATA_MONGODB_URI=mongodb://mongo:27017
+    - SPRING_DATA_MONGODB_URI=mongodb://mongo:27017/app

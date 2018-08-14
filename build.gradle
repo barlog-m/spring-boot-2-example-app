@@ -33,7 +33,6 @@ buildscript {
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'kotlin'
-apply plugin: 'kotlin-kapt'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'propdeps'
@@ -60,9 +59,6 @@ dependencies {
 
     compile 'org.springframework.boot:spring-boot-starter-webflux'
     compile 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
-
-    kapt 'org.springframework.boot:spring-boot-configuration-processor'
-    optional 'org.springframework.boot:spring-boot-configuration-processor'
 
     testCompile 'org.springframework.boot:spring-boot-starter-test'
 
@@ -96,9 +92,8 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
 }
 
 bootJar {
-    mustRunAfter tasks.clean
     mainClassName = 'app.AppKt'
-    archiveName 'app.jar'
+    baseName = 'app'
 }
 
 tasks.withType(Test) {
@@ -120,12 +115,13 @@ task wrapper(type: Wrapper) {
 // https://github.com/palantir/gradle-docker
 // gradle docker
 docker {
-    dependsOn tasks.bootJar
-    name 'app'
+    dependsOn build
+    name "${project.group}/${bootJar.baseName}"
     tags 'latest'
-    files tasks.bootJar.outputs
-    dockerfile file('src/main/docker/Dockerfile')
+    files bootJar.archivePath
+    dockerfile file("${projectDir}/src/main/docker/Dockerfile")
     buildArgs([
+        JAR_FILE : "${bootJar.archiveName}",
         JAVA_OPTS: '-XX:-TieredCompilation',
         PORT     : '8080'
     ])
