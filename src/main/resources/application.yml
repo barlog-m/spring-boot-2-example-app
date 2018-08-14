@@ -3,8 +3,11 @@ spring:
   application.name: app
   output.ansi.enabled: always
 
+  data:
+    mongodb:
+      database: app
+
   jackson:
-    property-naming-strategy: SNAKE_CASE
     deserialization:
       adjust-dates-to-context-time-zone: false
 

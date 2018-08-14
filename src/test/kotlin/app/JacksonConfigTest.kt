@@ -34,16 +34,17 @@ class JacksonConfigTest {
     @Test
     fun serialize() {
         val visitor = Visitor(ZonedDateTime.of(date, time, zone))
+        println(json.write(visitor))
         assertThat(json.write(visitor)).isEqualTo("visitor.json")
         assertThat(json.write(visitor)).isEqualToJson("visitor.json")
-        assertThat(json.write(visitor)).hasJsonPathStringValue("@.visit_time")
-        assertThat(json.write(visitor)).extractingJsonPathStringValue("@.visit_time")
+        assertThat(json.write(visitor)).hasJsonPathStringValue("@.visitTime")
+        assertThat(json.write(visitor)).extractingJsonPathStringValue("@.visitTime")
             .isEqualTo(VISIT_TIME)
     }
 
     @Test
     fun deserialize() {
-        val content = "{\"visit_time\": \"$VISIT_TIME\"}"
+        val content = "{\"visitTime\": \"$VISIT_TIME\"}"
         assertThat(json.parse(content))
             .isEqualTo(Visitor(ZonedDateTime.of(date, time, zone)))
         assertThat(json.parseObject(content).visitTime).isEqualTo(VISIT_TIME)
