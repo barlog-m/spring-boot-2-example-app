@@ -18,9 +18,9 @@ class CustomerRepositoryTest : BaseIntegrationTest() {
             repository
                 .findByName(customer.name)
                 .collectList())
-            .assertNext {
-                it.isNotEmpty() &&
-                    it.first { it.id == customer.id } != null
+            .assertNext { customers ->
+                customers.isNotEmpty() &&
+                    customers.first { it.id == customer.id } != null
             }
             .verifyComplete()
 
