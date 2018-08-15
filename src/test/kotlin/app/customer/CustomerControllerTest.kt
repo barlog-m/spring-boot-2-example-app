@@ -50,11 +50,11 @@ class CustomerControllerTest {
 
         webClient
             .get()
-            .uri({
+            .uri {
                 it
                     .path("/customer/by").queryParam("name", customer.name)
                     .build()
-            })
+            }
             .accept(MediaType.APPLICATION_JSON_UTF8)
             .exchange()
             .expectStatus().isOk
