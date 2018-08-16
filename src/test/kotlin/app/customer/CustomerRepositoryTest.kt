@@ -11,6 +11,22 @@ class CustomerRepositoryTest : BaseIntegrationTest() {
     private lateinit var repository: CustomerRepository
 
     @Test
+    fun findById() {
+        val customer = generateCustomer()
+        repository.save(customer).block()
+
+        StepVerifier.create(
+            repository
+                .findById(customer.id))
+            .assertNext {
+                it.id == customer.id
+            }
+            .verifyComplete()
+
+        repository.delete(customer).block()
+    }
+
+    @Test
     fun findByName() {
         val customer = generateCustomer()
         repository.save(customer).block()
