@@ -1,6 +1,7 @@
 package app.customer
 
 import app.BaseIntegrationTest
+import io.codearte.jfairy.Fairy
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import reactor.test.StepVerifier
@@ -46,7 +47,7 @@ class CustomerRepositoryTest : BaseIntegrationTest() {
         val customer = generateCustomer()
         repository.save(customer).block()
 
-        val newName = "Jane Doe"
+        val newName = Fairy.create().person().fullName
         StepVerifier.create(
             repository.save(customer.copy(name = newName))
                 .flatMap {
