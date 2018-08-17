@@ -25,7 +25,8 @@ class JacksonConfigTest {
     }
 
     data class Visitor(
-        val visitTime: ZonedDateTime
+        val visitTime: ZonedDateTime,
+        val nullString: String? = null
     )
 
     @Autowired
@@ -40,6 +41,7 @@ class JacksonConfigTest {
         assertThat(json.write(visitor)).hasJsonPathStringValue("@.visit_time")
         assertThat(json.write(visitor)).extractingJsonPathStringValue("@.visit_time")
             .isEqualTo(VISIT_TIME)
+        assertThat(json.write(visitor)).doesNotHaveJsonPathValue("@.null_string")
     }
 
     @Test

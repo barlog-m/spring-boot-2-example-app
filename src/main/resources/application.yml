@@ -14,6 +14,7 @@ spring:
     property-naming-strategy: SNAKE_CASE
     deserialization:
       adjust-dates-to-context-time-zone: false
+    default-property-inclusion: non_null
 
 server:
   port: 8080
