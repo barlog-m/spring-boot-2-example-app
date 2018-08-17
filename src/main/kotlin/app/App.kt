@@ -7,6 +7,8 @@ import org.springframework.boot.builder.SpringApplicationBuilder
 open class App
 
 fun main(vararg args: String) {
+    nettyUnsafeDisable()
+
     SpringApplicationBuilder(App::class.java)
         .registerShutdownHook(true).run(*args)
 }
