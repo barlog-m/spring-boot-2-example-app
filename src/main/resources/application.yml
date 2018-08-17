@@ -6,8 +6,12 @@ spring:
   data:
     mongodb:
       database: app
+      field-naming-strategy: org.springframework.data.mapping.model.SnakeCaseFieldNamingStrategy
+      repositories:
+        type: REACTIVE
 
   jackson:
+    property-naming-strategy: SNAKE_CASE
     deserialization:
       adjust-dates-to-context-time-zone: false
 
