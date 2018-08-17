@@ -36,5 +36,5 @@ class CustomerController(
 
     @DeleteMapping("/{id}")
     fun delete(@PathVariable id: ObjectId): Mono<Void> =
-        service.deleteById(id)
+        service.deleteById(id.toHexString())
 }

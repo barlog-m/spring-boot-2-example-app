@@ -8,7 +8,7 @@ import java.time.LocalDateTime
 
 @Document
 data class Customer(
-    @Id val id: ObjectId = ObjectId.get(),
+    @Id val id: String = ObjectId.get().toHexString(),
     val name: String,
     val balance: BigDecimal,
     val lastWithdraw: LocalDateTime? = null,
