@@ -1,6 +1,6 @@
 package app.customer
 
-import app.kExpectBody
+import app.kExpectBodyList
 import app.kIsEqualTo
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -51,14 +51,13 @@ class CustomerControllerTest {
         webClient
             .get()
             .uri {
-                it
-                    .path("/customer/by").queryParam("name", customer.name)
-                    .build()
+                it.path("/customer/by").queryParam("name", customer.name).build()
             }
             .accept(MediaType.APPLICATION_JSON_UTF8)
             .exchange()
             .expectStatus().isOk
-            .kExpectBody<List<Customer>>().kIsEqualTo(listOf(customer))
+            .kExpectBodyList<Customer>()
+            .kIsEqualTo(listOf(customer))
     }
 
     @Test
