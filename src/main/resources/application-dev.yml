@@ -4,4 +4,6 @@ spring:
       uri: mongodb://localhost:27017
 
 logging:
-  level.root: DEBUG
+  level:
+    root: DEBUG
+    org.springframework.web.reactive.result.method: DEBUG

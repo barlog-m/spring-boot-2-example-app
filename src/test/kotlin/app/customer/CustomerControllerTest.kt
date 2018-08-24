@@ -1,5 +1,6 @@
 package app.customer
 
+import app.kExpectBody
 import app.kExpectBodyList
 import app.kIsEqualTo
 import org.junit.jupiter.api.Test
@@ -30,17 +31,18 @@ class CustomerControllerTest {
     private val customer = generateCustomer()
 
     @Test
-    fun create() {
-        given(customerService.save(customer))
+    fun readById() {
+        given(customerService.findById(customer.id))
             .willReturn(Mono.just(customer))
 
         webClient
-            .post()
-            .uri("/customer")
-            .contentType(MediaType.APPLICATION_JSON_UTF8)
-            .body(BodyInserters.fromObject(customer))
+            .get()
+            .uri("/customer/${customer.id}")
+            .accept(MediaType.APPLICATION_JSON_UTF8)
             .exchange()
             .expectStatus().isOk
+            .kExpectBodyList<Customer>()
+            .kIsEqualTo(listOf(customer))
     }
 
     @Test
@@ -61,9 +63,25 @@ class CustomerControllerTest {
     }
 
     @Test
+    fun create() {
+        given(customerService.save(customer))
+            .willReturn(Mono.just(customer.id))
+
+        webClient
+            .post()
+            .uri("/customer")
+            .contentType(MediaType.APPLICATION_JSON_UTF8)
+            .body(BodyInserters.fromObject(customer))
+            .exchange()
+            .expectStatus().isOk
+            .kExpectBody<String>()
+            .kIsEqualTo(customer.id)
+    }
+
+    @Test
     fun update() {
         given(customerService.save(customer))
-            .willReturn(Mono.just(customer))
+            .willReturn(Mono.just(customer.id))
 
         webClient
             .put()
@@ -72,6 +90,8 @@ class CustomerControllerTest {
             .body(BodyInserters.fromObject(customer))
             .exchange()
             .expectStatus().isOk
+            .kExpectBody<String>()
+            .kIsEqualTo(customer.id)
     }
 
     @Test

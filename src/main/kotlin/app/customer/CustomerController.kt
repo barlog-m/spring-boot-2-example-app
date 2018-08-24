@@ -20,8 +20,15 @@ class CustomerController(
     private val service: CustomerService
 ) {
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_UTF8_VALUE])
-    fun create(@RequestBody customer: Customer): Mono<Void> =
-        service.save(customer).then()
+    fun create(@RequestBody customer: Customer): Mono<String> =
+        service.save(customer)
+
+    @GetMapping(
+        path = ["/{id}"],
+        produces = [MediaType.APPLICATION_JSON_UTF8_VALUE]
+    )
+    fun readById(@PathVariable id: ObjectId): Mono<Customer> =
+        service.findById(id.toHexString())
 
     @GetMapping(
         path = ["/by"],
@@ -31,8 +38,8 @@ class CustomerController(
         service.findByName(name)
 
     @PutMapping(consumes = [MediaType.APPLICATION_JSON_UTF8_VALUE])
-    fun update(@RequestBody customer: Customer): Mono<Void> =
-        service.save(customer).then()
+    fun update(@RequestBody customer: Customer): Mono<String> =
+        service.save(customer)
 
     @DeleteMapping("/{id}")
     fun delete(@PathVariable id: ObjectId): Mono<Void> =
