@@ -20,9 +20,8 @@ class CustomerServiceTest {
     fun findById() {
         given(repository.findById(customer.id)).willReturn(Mono.just(customer))
 
-        StepVerifier.create(
-            service.findById(customer.id)
-        )
+        StepVerifier
+            .create(service.findById(customer.id))
             .expectNext(customer)
             .verifyComplete()
 
@@ -34,9 +33,8 @@ class CustomerServiceTest {
         given(repository.findById(kAnyObject(String::class.java)))
             .willReturn(Mono.empty())
 
-        StepVerifier.create(
-            service.findById(customer.id)
-        )
+        StepVerifier
+            .create(service.findById(customer.id))
             .expectError(ResponseStatusException::class.java)
             .verify()
 
@@ -48,9 +46,8 @@ class CustomerServiceTest {
         given(repository.findByName(customer.name)).willReturn(Flux
             .just(customer))
 
-        StepVerifier.create(
-            service.findByName(customer.name)
-        )
+        StepVerifier
+            .create(service.findByName(customer.name))
             .expectNext(customer)
             .verifyComplete()
 
@@ -62,9 +59,8 @@ class CustomerServiceTest {
         given(repository.findByName(kAnyObject(String::class.java)))
             .willReturn(Flux.empty())
 
-        StepVerifier.create(
-            service.findByName(customer.name)
-        )
+        StepVerifier
+            .create(service.findByName(customer.name))
             .expectError(ResponseStatusException::class.java)
             .verify()
 
