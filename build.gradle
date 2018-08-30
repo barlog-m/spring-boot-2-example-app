@@ -52,7 +52,6 @@ dependencies {
     compile "io.github.microutils:kotlin-logging:$kotlinLoggingVer"
 
     compile 'com.fasterxml.jackson.module:jackson-module-kotlin'
-    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 
     // compile "javax.annotation:javax.annotation-api:$javaxAnnotationApiVer"
     // compile "javax.transaction:javax.transaction-api:$javaxTransactionApiVer"
@@ -108,7 +107,7 @@ test {
 }
 
 wrapper {
-    gradleVersion = '4.9'
+    gradleVersion = '4.10'
     distributionType = Wrapper.DistributionType.ALL
 }
 
