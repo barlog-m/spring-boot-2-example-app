@@ -41,8 +41,8 @@ class CustomerControllerTest {
             .accept(MediaType.APPLICATION_JSON_UTF8)
             .exchange()
             .expectStatus().isOk
-            .kExpectBodyList<Customer>()
-            .kIsEqualTo(listOf(customer))
+            .kExpectBody<Customer>()
+            .kIsEqualTo(customer)
     }
 
     @Test
