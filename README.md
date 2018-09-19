@@ -16,3 +16,8 @@ gradle bootRun --spring.profiles.active=dev
 ```
 gradle bootJar
 ```
+
+### POST request example for httpie to create customer
+```
+http POST :8080/customer name="John Doe" balance="0.99" last_deposit="2018-08-14T16:55:30"
+```
