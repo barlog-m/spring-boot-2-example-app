@@ -25,7 +25,7 @@ val reactorCoreVer = "3.1.9.RELEASE"
 val javaxAnnotationApiVer = "1.3.2"
 val javaxTransactionApiVer = "1.3"
 
-val testContainersVer = "1.8.3"
+val testContainersVer = "1.9.0"
 val jfairyVer = "0.5.9"
 
 dependencies {
@@ -92,7 +92,7 @@ tasks {
     }
 
     tasks.getByName<Wrapper>("wrapper") {
-        gradleVersion = "4.10.1"
+        gradleVersion = "4.10.2"
         distributionType = Wrapper.DistributionType.ALL
     }
 

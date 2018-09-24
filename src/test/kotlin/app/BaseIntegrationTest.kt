@@ -1,6 +1,7 @@
 package app
 
 import app.config.ITConfig
+import mu.KLogging
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
@@ -10,7 +11,7 @@ import org.springframework.boot.test.util.TestPropertyValues
 import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.context.ApplicationContextInitializer
 import org.springframework.context.ApplicationListener
-import org.springframework.context.event.ContextStoppedEvent
+import org.springframework.context.event.ContextClosedEvent
 import org.springframework.test.context.ContextConfiguration
 import org.testcontainers.containers.GenericContainer
 
@@ -22,7 +23,7 @@ import org.testcontainers.containers.GenericContainer
 @ActiveProfiles("test")
 @ContextConfiguration(initializers = [BaseIntegrationTest.Initializer::class])
 abstract class BaseIntegrationTest {
-    companion object {
+    companion object : KLogging() {
         init {
             System.setProperty("io.netty.noUnsafe", true.toString())
         }
@@ -41,15 +42,18 @@ abstract class BaseIntegrationTest {
         override fun initialize(context: ConfigurableApplicationContext) {
             mongoContainer.start()
 
-            println("mongo port: ${mongoContainer.getMappedPort(MONGO_PORT)}")
+            logger.info { "mongo port: ${mongoContainer.getMappedPort(MONGO_PORT)}" }
 
             TestPropertyValues.of(
                 "spring.data.mongodb.uri=mongodb://localhost:${mongoContainer.getMappedPort(MONGO_PORT)}")
                 .applyTo(context)
 
-            context.addApplicationListener(ApplicationListener<ContextStoppedEvent> {
+            context.addApplicationListener(ApplicationListener { _: ContextClosedEvent ->
                 mongoContainer.stop()
+                logger.info { "mongo container stop" }
             })
+
+            context.registerShutdownHook()
         }
     }
 }
