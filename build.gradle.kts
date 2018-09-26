@@ -98,7 +98,6 @@ tasks {
 
     val bootJar = tasks.getByName<BootJar>("bootJar") {
         baseName = "app"
-        mainClassName = "app.AppKt"
 
         if (project.hasProperty("archiveName")) {
             archiveName = project.properties["archiveName"] as String
