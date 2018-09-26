@@ -6,7 +6,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     application
     idea
-    kotlin("jvm") version "1.2.70"
+    kotlin("jvm") version "1.2.71"
 
     id("org.springframework.boot") version "2.0.5.RELEASE"
     id("io.spring.dependency-management") version "1.0.6.RELEASE"
@@ -25,7 +25,7 @@ val reactorCoreVer = "3.1.9.RELEASE"
 val javaxAnnotationApiVer = "1.3.2"
 val javaxTransactionApiVer = "1.3"
 
-val testContainersVer = "1.9.0"
+val testContainersVer = "1.9.1"
 val jfairyVer = "0.5.9"
 
 dependencies {
