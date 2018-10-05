@@ -21,7 +21,7 @@ repositories {
 }
 
 val kotlinLoggingVer = "1.6.10"
-val reactorCoreVer = "3.1.9.RELEASE"
+
 val javaxAnnotationApiVer = "1.3.2"
 val javaxTransactionApiVer = "1.3"
 
@@ -40,7 +40,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("io.projectreactor:reactor-test:$reactorCoreVer")
+    testImplementation("io.projectreactor:reactor-test")
     testImplementation("org.testcontainers:testcontainers:$testContainersVer")
     testImplementation("io.codearte.jfairy:jfairy:$jfairyVer")
 
@@ -71,6 +71,35 @@ idea {
     }
 }
 
+sourceSets.create("testUtils") {
+    java.srcDir(file("src/testUtils/kotlin"))
+    resources.srcDir(file("src/testUtils/resources"))
+
+    compileClasspath += sourceSets["main"].output
+    compileClasspath += configurations.testCompileClasspath
+
+    runtimeClasspath += sourceSets["main"].output
+    runtimeClasspath += configurations.testRuntimeClasspath
+}
+
+sourceSets.getByName("test") {
+    compileClasspath += sourceSets["testUtils"].output
+    runtimeClasspath += sourceSets["testUtils"].output
+}
+
+sourceSets.create("testIntegration") {
+    java.srcDir(file("src/testIntegration/kotlin"))
+    resources.srcDir(file("src/testIntegration/resources"))
+
+    compileClasspath += sourceSets["main"].output
+    compileClasspath += sourceSets["testUtils"].output
+    compileClasspath += configurations.testCompileClasspath
+
+    runtimeClasspath += sourceSets["main"].output
+    runtimeClasspath += sourceSets["testUtils"].output
+    runtimeClasspath += configurations.testRuntimeClasspath
+}
+
 tasks {
     tasks.withType<KotlinCompile>().configureEach {
         kotlinOptions {
@@ -83,12 +112,26 @@ tasks {
     }
 
     tasks.withType<Test>().configureEach {
-        maxParallelForks = Runtime.getRuntime().availableProcessors().div(2)
+        maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).takeIf { it > 0 } ?: 1
 
         useJUnitPlatform()
         testLogging {
             events = setOf(TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED)
         }
+
+        reports.html.isEnabled = false
+        reports.junitXml.isEnabled = false
+    }
+
+    task<Test>("testIntegration") {
+        description = "Integration tests"
+        group = "verification"
+        testClassesDirs = sourceSets["testIntegration"].output.classesDirs
+        classpath = sourceSets["testIntegration"].runtimeClasspath
+    }
+
+    task("testAll") {
+        finalizedBy(tasks["test"], tasks["testIntegration"])
     }
 
     tasks.getByName<Wrapper>("wrapper") {

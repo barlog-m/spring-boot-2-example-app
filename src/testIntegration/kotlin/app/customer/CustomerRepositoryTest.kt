@@ -1,8 +1,13 @@
 package app.customer
 
 import app.BaseIntegrationTest
+import app.generator.generateCustomer
 import io.codearte.jfairy.Fairy
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertAll
 import org.springframework.beans.factory.annotation.Autowired
 import reactor.test.StepVerifier
 
@@ -12,18 +17,18 @@ class CustomerRepositoryTest : BaseIntegrationTest() {
 
     @Test
     fun findById() {
-        val customer = generateCustomer()
-        repository.save(customer).block()
+        val referenceCustomer = generateCustomer()
+        repository.save(referenceCustomer).block()
 
         StepVerifier.create(
             repository
-                .findById(customer.id))
-            .assertNext {
-                it.id == customer.id
+                .findById(referenceCustomer.id))
+            .assertNext { customer ->
+                assertEquals(referenceCustomer.id, customer.id)
             }
             .verifyComplete()
 
-        repository.delete(customer).block()
+        repository.delete(referenceCustomer).block()
     }
 
     @Test
@@ -36,8 +41,10 @@ class CustomerRepositoryTest : BaseIntegrationTest() {
                 .findByName(customer.name)
                 .collectList())
             .assertNext { customers ->
-                customers.isNotEmpty() &&
-                    customers.first { it.id == customer.id } != null
+                assertAll({
+                    assertTrue(customers.isNotEmpty())
+                    assertNotNull(customers.first { it.id == customer.id })
+                })
             }
             .verifyComplete()
 
@@ -90,7 +97,9 @@ class CustomerRepositoryTest : BaseIntegrationTest() {
                         .findByName(customer.name)
                         .collectList()
                 ))
-            .assertNext { it.isEmpty() }
+            .assertNext {
+                assertTrue(it.isEmpty())
+            }
             .verifyComplete()
     }
 }

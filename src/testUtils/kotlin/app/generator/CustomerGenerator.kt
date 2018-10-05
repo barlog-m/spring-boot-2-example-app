@@ -1,5 +1,6 @@
-package app.customer
+package app.generator
 
+import app.customer.Customer
 import app.util.truncate
 import io.codearte.jfairy.Fairy
 import java.math.BigDecimal

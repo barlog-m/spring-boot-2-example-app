@@ -1,5 +1,6 @@
 package app.customer
 
+import app.generator.generateCustomer
 import app.kExpectBody
 import app.kExpectBodyList
 import app.kIsEqualTo
@@ -52,8 +53,11 @@ class CustomerControllerTest {
 
         webClient
             .get()
-            .uri {
-                it.path("/customer/by").queryParam("name", customer.name).build()
+            .uri { builder ->
+                builder
+                    .path("/customer/by")
+                    .queryParam("name", customer.name)
+                    .build()
             }
             .accept(MediaType.APPLICATION_JSON_UTF8)
             .exchange()
