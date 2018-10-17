@@ -8,8 +8,10 @@ plugins {
     idea
     kotlin("jvm") version "1.2.71"
 
-    id("org.springframework.boot") version "2.0.5.RELEASE"
+    id("org.springframework.boot") version "2.0.6.RELEASE"
     id("io.spring.dependency-management") version "1.0.6.RELEASE"
+
+    id("com.gorylenko.gradle-git-properties") version "1.5.2"
 
     // gradle dependencyUpdates -Drevision=release
     id("com.github.ben-manes.versions") version "0.20.0"
@@ -39,6 +41,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
 
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.projectreactor:reactor-test")
     testImplementation("org.testcontainers:testcontainers:$testContainersVer")
@@ -53,7 +57,7 @@ application {
     mainClassName = "app.AppKt"
     applicationName = "app"
     version = "0.1-SNAPSHOT"
-    group = "template.kotlin.spring"
+    group = "example.kotlin.spring"
 }
 
 java {
@@ -71,39 +75,15 @@ idea {
     }
 }
 
-sourceSets.create("testUtils") {
-    java.srcDir(file("src/testUtils/kotlin"))
-    resources.srcDir(file("src/testUtils/resources"))
-
-    compileClasspath += sourceSets["main"].output
-    compileClasspath += configurations.testCompileClasspath
-
-    runtimeClasspath += sourceSets["main"].output
-    runtimeClasspath += configurations.testRuntimeClasspath
-}
-
-sourceSets.getByName("test") {
-    compileClasspath += sourceSets["testUtils"].output
-    runtimeClasspath += sourceSets["testUtils"].output
-}
-
-sourceSets.create("testIntegration") {
-    java.srcDir(file("src/testIntegration/kotlin"))
-    resources.srcDir(file("src/testIntegration/resources"))
-
-    compileClasspath += sourceSets["main"].output
-    compileClasspath += sourceSets["testUtils"].output
-    compileClasspath += configurations.testCompileClasspath
-
-    runtimeClasspath += sourceSets["main"].output
-    runtimeClasspath += sourceSets["testUtils"].output
-    runtimeClasspath += configurations.testRuntimeClasspath
+springBoot {
+    buildInfo()
 }
 
 tasks {
     tasks.withType<KotlinCompile>().configureEach {
         kotlinOptions {
             jvmTarget = JavaVersion.VERSION_1_8.toString()
+            freeCompilerArgs = listOf("-Xprogressive")
         }
     }
 
@@ -121,17 +101,6 @@ tasks {
 
         reports.html.isEnabled = false
         reports.junitXml.isEnabled = false
-    }
-
-    task<Test>("testIntegration") {
-        description = "Integration tests"
-        group = "verification"
-        testClassesDirs = sourceSets["testIntegration"].output.classesDirs
-        classpath = sourceSets["testIntegration"].runtimeClasspath
-    }
-
-    task("testAll") {
-        finalizedBy(tasks["test"], tasks["testIntegration"])
     }
 
     tasks.getByName<Wrapper>("wrapper") {

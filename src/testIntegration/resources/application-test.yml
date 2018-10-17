@@ -1,5 +1,0 @@
-logging:
-  level:
-    root: INFO
-    com.github.dockerjava: WARN
-    app: DEBUG
