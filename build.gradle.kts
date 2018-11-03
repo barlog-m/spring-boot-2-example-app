@@ -11,6 +11,8 @@ plugins {
     id("org.springframework.boot") version "2.1.0.RELEASE"
     id("io.spring.dependency-management") version "1.0.6.RELEASE"
 
+    id("com.gorylenko.gradle-git-properties") version "1.5.2"
+
     // gradle dependencyUpdates -Drevision=release
     id("com.github.ben-manes.versions") version "0.20.0"
     id("com.palantir.docker") version "0.20.1"
@@ -39,6 +41,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
 
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.projectreactor:reactor-test")
     testImplementation("org.testcontainers:testcontainers:$testContainersVer")
@@ -52,8 +56,8 @@ dependencies {
 application {
     mainClassName = "app.AppKt"
     applicationName = "app"
-    version = "0.3-SNAPSHOT"
-    group = "example.spring.app"
+    version = "0.1-SNAPSHOT"
+    group = "example.kotlin.spring"
 }
 
 java {
@@ -71,10 +75,15 @@ idea {
     }
 }
 
+springBoot {
+    buildInfo()
+}
+
 tasks {
     tasks.withType<KotlinCompile>().configureEach {
         kotlinOptions {
             jvmTarget = JavaVersion.VERSION_1_8.toString()
+            freeCompilerArgs = listOf("-Xprogressive")
         }
     }
 
