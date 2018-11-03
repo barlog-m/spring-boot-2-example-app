@@ -6,9 +6,9 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     application
     idea
-    kotlin("jvm") version "1.2.71"
+    kotlin("jvm") version "1.3.0"
 
-    id("org.springframework.boot") version "2.0.5.RELEASE"
+    id("org.springframework.boot") version "2.0.6.RELEASE"
     id("io.spring.dependency-management") version "1.0.6.RELEASE"
 
     // gradle dependencyUpdates -Drevision=release
@@ -52,8 +52,8 @@ dependencies {
 application {
     mainClassName = "app.AppKt"
     applicationName = "app"
-    version = "0.1-SNAPSHOT"
-    group = "template.kotlin.spring"
+    version = "0.3-SNAPSHOT"
+    group = "example.spring.app"
 }
 
 java {
