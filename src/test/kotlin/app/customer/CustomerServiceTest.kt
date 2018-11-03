@@ -1,6 +1,5 @@
 package app.customer
 
-import app.generator.generateCustomer
 import app.kAnyObject
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito.given

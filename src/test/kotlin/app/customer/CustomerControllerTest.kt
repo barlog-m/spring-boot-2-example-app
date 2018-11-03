@@ -1,6 +1,5 @@
 package app.customer
 
-import app.generator.generateCustomer
 import app.kExpectBody
 import app.kExpectBodyList
 import app.kIsEqualTo

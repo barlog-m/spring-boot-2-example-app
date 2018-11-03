@@ -71,35 +71,6 @@ idea {
     }
 }
 
-sourceSets.create("testUtils") {
-    java.srcDir(file("src/testUtils/kotlin"))
-    resources.srcDir(file("src/testUtils/resources"))
-
-    compileClasspath += sourceSets["main"].output
-    compileClasspath += configurations.testCompileClasspath
-
-    runtimeClasspath += sourceSets["main"].output
-    runtimeClasspath += configurations.testRuntimeClasspath
-}
-
-sourceSets.getByName("test") {
-    compileClasspath += sourceSets["testUtils"].output
-    runtimeClasspath += sourceSets["testUtils"].output
-}
-
-sourceSets.create("testIntegration") {
-    java.srcDir(file("src/testIntegration/kotlin"))
-    resources.srcDir(file("src/testIntegration/resources"))
-
-    compileClasspath += sourceSets["main"].output
-    compileClasspath += sourceSets["testUtils"].output
-    compileClasspath += configurations.testCompileClasspath
-
-    runtimeClasspath += sourceSets["main"].output
-    runtimeClasspath += sourceSets["testUtils"].output
-    runtimeClasspath += configurations.testRuntimeClasspath
-}
-
 tasks {
     tasks.withType<KotlinCompile>().configureEach {
         kotlinOptions {
@@ -121,17 +92,6 @@ tasks {
 
         reports.html.isEnabled = false
         reports.junitXml.isEnabled = false
-    }
-
-    task<Test>("testIntegration") {
-        description = "Integration tests"
-        group = "verification"
-        testClassesDirs = sourceSets["testIntegration"].output.classesDirs
-        classpath = sourceSets["testIntegration"].runtimeClasspath
-    }
-
-    task("testAll") {
-        finalizedBy(tasks["test"], tasks["testIntegration"])
     }
 
     tasks.getByName<Wrapper>("wrapper") {

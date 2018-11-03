@@ -1,4 +1,4 @@
-package app.generator
+package app.customer
 
 import app.customer.Customer
 import app.util.truncate

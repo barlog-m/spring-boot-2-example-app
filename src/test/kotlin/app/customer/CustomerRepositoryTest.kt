@@ -1,7 +1,6 @@
 package app.customer
 
 import app.BaseIntegrationTest
-import app.generator.generateCustomer
 import io.codearte.jfairy.Fairy
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
