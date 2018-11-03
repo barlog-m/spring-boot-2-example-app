@@ -2,11 +2,9 @@ package app
 
 import app.config.ITConfig
 import mu.KLogging
-import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
 import org.springframework.test.context.ActiveProfiles
-import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.boot.test.util.TestPropertyValues
 import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.context.ApplicationContextInitializer
@@ -15,7 +13,6 @@ import org.springframework.context.event.ContextClosedEvent
 import org.springframework.test.context.ContextConfiguration
 import org.testcontainers.containers.GenericContainer
 
-@ExtendWith(SpringExtension::class)
 @SpringBootTest(
     classes = [ITConfig::class],
     webEnvironment = WebEnvironment.NONE

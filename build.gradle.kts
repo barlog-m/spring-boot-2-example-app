@@ -8,7 +8,7 @@ plugins {
     idea
     kotlin("jvm") version "1.3.0"
 
-    id("org.springframework.boot") version "2.0.6.RELEASE"
+    id("org.springframework.boot") version "2.1.0.RELEASE"
     id("io.spring.dependency-management") version "1.0.6.RELEASE"
 
     // gradle dependencyUpdates -Drevision=release
@@ -57,13 +57,13 @@ application {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_10
-    targetCompatibility = JavaVersion.VERSION_1_10
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 }
 
 idea {
     project {
-        languageLevel = IdeaLanguageLevel(JavaVersion.VERSION_1_10)
+        languageLevel = IdeaLanguageLevel(JavaVersion.VERSION_11)
     }
     module {
         isDownloadJavadoc = true

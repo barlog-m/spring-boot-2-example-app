@@ -1,13 +1,11 @@
 package app.customer
 
+import app.RestTest
 import app.kExpectBody
 import app.kExpectBodyList
 import app.kIsEqualTo
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
-import org.springframework.test.context.ActiveProfiles
-import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.beans.factory.annotation.Autowired
@@ -16,9 +14,9 @@ import org.springframework.http.MediaType
 import org.springframework.web.reactive.function.BodyInserters
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
+import java.net.URLEncoder
 
-@ExtendWith(SpringExtension::class)
-@ActiveProfiles("test")
+@RestTest
 @WebFluxTest(CustomerController::class)
 class CustomerControllerTest {
 
@@ -55,7 +53,7 @@ class CustomerControllerTest {
             .uri { builder ->
                 builder
                     .path("/customer/by")
-                    .queryParam("name", customer.name)
+                    .queryParam("name", URLEncoder.encode(customer.name, "UTF-8"))
                     .build()
             }
             .accept(MediaType.APPLICATION_JSON_UTF8)

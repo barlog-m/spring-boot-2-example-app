@@ -1,7 +1,7 @@
-Example [Spring Boot 2](http://projects.spring.io/spring-boot) application with
+Example [Spring Boot 2.1](http://projects.spring.io/spring-boot) application with
 
-* [Kotlin 1.2](https://kotlinlang.org)
-* [Java 10](http://openjdk.java.net)
+* [Kotlin 1.3](https://kotlinlang.org)
+* [Java 11](http://openjdk.java.net)
 * [JUnit 5](http://junit.org/junit5)
 * [TestContainers](https://www.testcontainers.org)
 
