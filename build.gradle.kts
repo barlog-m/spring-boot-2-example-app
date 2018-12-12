@@ -6,9 +6,9 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     application
     idea
-    kotlin("jvm") version "1.3.0"
+    kotlin("jvm") version "1.3.11"
 
-    id("org.springframework.boot") version "2.1.0.RELEASE"
+    id("org.springframework.boot") version "2.1.1.RELEASE"
     id("io.spring.dependency-management") version "1.0.6.RELEASE"
 
     id("com.gorylenko.gradle-git-properties") version "1.5.2"
@@ -22,12 +22,12 @@ repositories {
     jcenter()
 }
 
-val kotlinLoggingVer = "1.6.10"
+val kotlinLoggingVer = "1.6.22"
 
 val javaxAnnotationApiVer = "1.3.2"
 val javaxTransactionApiVer = "1.3"
 
-val testContainersVer = "1.9.1"
+val testContainersVer = "1.10.2"
 val jfairyVer = "0.5.9"
 
 dependencies {
@@ -80,18 +80,18 @@ springBoot {
 }
 
 tasks {
-    tasks.withType<KotlinCompile>().configureEach {
+    withType(KotlinCompile::class).configureEach {
         kotlinOptions {
             jvmTarget = JavaVersion.VERSION_1_8.toString()
             freeCompilerArgs = listOf("-progressive")
         }
     }
 
-    tasks.withType<JavaCompile>().configureEach {
+    withType(JavaCompile::class).configureEach {
         options.isFork = true
     }
 
-    tasks.withType<Test>().configureEach {
+    withType(Test::class).configureEach {
         maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).takeIf { it > 0 } ?: 1
 
         useJUnitPlatform()
@@ -103,12 +103,12 @@ tasks {
         reports.junitXml.isEnabled = false
     }
 
-    tasks.getByName<Wrapper>("wrapper") {
-        gradleVersion = "4.10.2"
+    wrapper {
+        gradleVersion = "5.0"
         distributionType = Wrapper.DistributionType.ALL
     }
 
-    val bootJar = tasks.getByName<BootJar>("bootJar") {
+    bootJar {
         baseName = "app"
 
         if (project.hasProperty("archiveName")) {
@@ -116,9 +116,9 @@ tasks {
         }
     }
 
-    val build = tasks.getByName("build")
-
     docker {
+        val build = build.get()
+        val bootJar = bootJar.get()
         dependsOn(build)
         name = "${project.group}/${bootJar.baseName}"
         files(bootJar.archivePath)
@@ -131,7 +131,7 @@ tasks {
         pull(true)
     }
 
-    task("stage") {
-        dependsOn(build, tasks.getByName("clean"))
+    register("stage") {
+        dependsOn("build", "clean")
     }
 }

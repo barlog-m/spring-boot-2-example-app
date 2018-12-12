@@ -4,6 +4,7 @@ Example [Spring Boot 2.1](http://projects.spring.io/spring-boot) application wit
 * [Java 11](http://openjdk.java.net)
 * [JUnit 5](http://junit.org/junit5)
 * [TestContainers](https://www.testcontainers.org)
+* [Gradle 5](https://gradle.org)
 
 Gradle configuration improvements based on articles:
 * [Improving the Performance of Gradle Builds](https://guides.gradle.org/performance/)
