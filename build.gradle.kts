@@ -27,7 +27,7 @@ val kotlinLoggingVer = "1.6.22"
 val javaxAnnotationApiVer = "1.3.2"
 val javaxTransactionApiVer = "1.3"
 
-val testContainersVer = "1.10.2"
+val testContainersVer = "1.10.3"
 val jfairyVer = "0.5.9"
 
 dependencies {
@@ -43,14 +43,16 @@ dependencies {
 
     implementation("org.springframework.boot:spring-boot-starter-actuator")
 
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-test") {
+        exclude(group = "junit", module = "junit")
+    }
     testImplementation("io.projectreactor:reactor-test")
     testImplementation("org.testcontainers:testcontainers:$testContainersVer")
     testImplementation("io.codearte.jfairy:jfairy:$jfairyVer")
 
-    testImplementation(kotlin("test-junit5"))
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-params")
 }
 
 application {
