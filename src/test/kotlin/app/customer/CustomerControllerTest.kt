@@ -5,6 +5,8 @@ import app.kExpectBody
 import app.kExpectBodyList
 import app.kIsEqualTo
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.parallel.Execution
+import org.junit.jupiter.api.parallel.ExecutionMode.SAME_THREAD
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.web.reactive.server.WebTestClient
@@ -18,6 +20,7 @@ import java.net.URLEncoder
 
 @RestTest
 @WebFluxTest(CustomerController::class)
+@Execution(SAME_THREAD)
 class CustomerControllerTest {
 
     @Autowired

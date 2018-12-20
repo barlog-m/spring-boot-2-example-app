@@ -2,6 +2,8 @@ package app
 
 import app.config.ITConfig
 import mu.KLogging
+import org.junit.jupiter.api.parallel.Execution
+import org.junit.jupiter.api.parallel.ExecutionMode.SAME_THREAD
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
 import org.springframework.test.context.ActiveProfiles
@@ -19,6 +21,7 @@ import org.testcontainers.containers.GenericContainer
 )
 @ActiveProfiles("test")
 @ContextConfiguration(initializers = [BaseIntegrationTest.Initializer::class])
+@Execution(SAME_THREAD)
 abstract class BaseIntegrationTest {
     companion object : KLogging() {
         init {
