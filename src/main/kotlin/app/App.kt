@@ -1,7 +1,7 @@
 package app
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.builder.SpringApplicationBuilder
+import org.springframework.boot.runApplication
 
 @SpringBootApplication
 open class App
@@ -9,6 +9,7 @@ open class App
 fun main(vararg args: String) {
     nettyUnsafeDisable()
 
-    SpringApplicationBuilder(App::class.java)
-        .registerShutdownHook(true).run(*args)
+    runApplication<App>(*args) {
+        setRegisterShutdownHook(true)
+    }
 }
