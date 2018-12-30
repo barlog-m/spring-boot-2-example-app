@@ -2,6 +2,7 @@ spring:
   main.banner-mode: "off"
   application.name: app
   output.ansi.enabled: always
+  jmx.enabled: false
 
   data:
     mongodb:
@@ -25,6 +26,7 @@ management:
     enabled-by-default: true
     web.exposure.include: "health, info, env, configprops, metrics"
     jmx.exposure.exclude: "*"
+  metrics.export.jmx.enabled: false
 
 logging:
   pattern:
