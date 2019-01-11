@@ -11,11 +11,11 @@ plugins {
     id("org.springframework.boot") version "2.1.1.RELEASE"
     id("io.spring.dependency-management") version "1.0.6.RELEASE"
 
-    id("com.gorylenko.gradle-git-properties") version "1.5.2"
+    id("com.gorylenko.gradle-git-properties") version "2.0.0"
 
     // gradle dependencyUpdates -Drevision=release
     id("com.github.ben-manes.versions") version "0.20.0"
-    id("com.palantir.docker") version "0.20.1"
+    id("com.palantir.docker") version "0.21.0"
 }
 
 repositories {
@@ -27,7 +27,7 @@ val kotlinLoggingVer = "1.6.22"
 val javaxAnnotationApiVer = "1.3.2"
 val javaxTransactionApiVer = "1.3"
 
-val testContainersVer = "1.10.3"
+val testContainersVer = "1.10.5"
 val jfairyVer = "0.5.9"
 
 dependencies {
@@ -106,27 +106,29 @@ tasks {
     }
 
     wrapper {
-        gradleVersion = "5.0"
+        gradleVersion = "5.1.1"
         distributionType = Wrapper.DistributionType.ALL
     }
 
     bootJar {
-        baseName = "app"
+        archiveBaseName.set("app")
 
         if (project.hasProperty("archiveName")) {
-            archiveName = project.properties["archiveName"] as String
+            archiveFileName.set(project.properties["archiveName"] as String)
         }
     }
 
     docker {
         val build = build.get()
         val bootJar = bootJar.get()
+
         dependsOn(build)
-        name = "${project.group}/${bootJar.baseName}"
-        files(bootJar.archivePath)
+
+        name = "${project.group}/${bootJar.archiveBaseName.get()}".toLowerCase()
+        files(bootJar.archiveFile)
         setDockerfile(file("$projectDir/src/main/docker/Dockerfile"))
         buildArgs(mapOf(
-            "JAR_FILE" to bootJar.archiveName,
+            "JAR_FILE" to bootJar.archiveFileName.get(),
             "JAVA_OPTS" to "-XX:-TieredCompilation",
             "PORT" to "8080"
         ))
