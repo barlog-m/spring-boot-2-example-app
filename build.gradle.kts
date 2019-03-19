@@ -1,20 +1,17 @@
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.gradle.plugins.ide.idea.model.IdeaLanguageLevel
-import org.springframework.boot.gradle.tasks.bundling.BootJar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     application
     idea
-    kotlin("jvm") version "1.3.11"
+    kotlin("jvm") version "1.3.21"
 
-    id("org.springframework.boot") version "2.1.1.RELEASE"
-    id("io.spring.dependency-management") version "1.0.6.RELEASE"
-
-    id("com.gorylenko.gradle-git-properties") version "2.0.0"
+    id("org.springframework.boot") version "2.1.3.RELEASE"
+    id("io.spring.dependency-management") version "1.0.7.RELEASE"
 
     // gradle dependencyUpdates -Drevision=release
-    id("com.github.ben-manes.versions") version "0.20.0"
+    id("com.github.ben-manes.versions") version "0.21.0"
     id("com.palantir.docker") version "0.21.0"
 }
 
@@ -22,12 +19,12 @@ repositories {
     jcenter()
 }
 
-val kotlinLoggingVer = "1.6.22"
+val kotlinLoggingVer = "1.6.25"
 
 val javaxAnnotationApiVer = "1.3.2"
 val javaxTransactionApiVer = "1.3"
 
-val testContainersVer = "1.10.5"
+val testContainersVer = "1.10.7"
 val jfairyVer = "0.5.9"
 
 dependencies {
@@ -55,11 +52,12 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-params")
 }
 
+val appName = "app"
+val appVer by lazy { "0.0.1+${gitRev()}" }
+
 application {
     mainClassName = "app.AppKt"
-    applicationName = "app"
-    version = "0.1-SNAPSHOT"
-    group = "example.kotlin.spring"
+    applicationName = appName
 }
 
 java {
@@ -78,7 +76,13 @@ idea {
 }
 
 springBoot {
-    buildInfo()
+    buildInfo {
+        properties {
+            artifact = "$appName-$appVer.jar"
+            version = appVer
+            name = appName
+        }
+    }
 }
 
 tasks {
@@ -111,7 +115,8 @@ tasks {
     }
 
     bootJar {
-        archiveBaseName.set("app")
+        archiveBaseName.set(appName)
+        archiveVersion.set(appVer)
 
         if (project.hasProperty("archiveName")) {
             archiveFileName.set(project.properties["archiveName"] as String)
@@ -138,4 +143,9 @@ tasks {
     register("stage") {
         dependsOn("build", "clean")
     }
+}
+
+fun gitRev() = ProcessBuilder("git", "rev-parse", "HEAD").start().let { process ->
+    process.waitFor(100, TimeUnit.MILLISECONDS)
+    process.inputStream.bufferedReader().readLine() ?: "none"
 }
