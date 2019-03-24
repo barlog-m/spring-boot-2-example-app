@@ -110,11 +110,15 @@ tasks {
     }
 
     wrapper {
-        gradleVersion = "5.1.1"
+        gradleVersion = "5.3"
         distributionType = Wrapper.DistributionType.ALL
     }
 
     bootJar {
+        manifest {
+            attributes("Multi-Release" to true)
+        }
+
         archiveBaseName.set(appName)
         archiveVersion.set(appVer)
 
