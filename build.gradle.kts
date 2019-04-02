@@ -24,7 +24,7 @@ val kotlinLoggingVer = "1.6.25"
 val javaxAnnotationApiVer = "1.3.2"
 val javaxTransactionApiVer = "1.3"
 
-val testContainersVer = "1.10.7"
+val testContainersVer = "1.11.1"
 val jfairyVer = "0.5.9"
 
 dependencies {
@@ -110,7 +110,7 @@ tasks {
     }
 
     wrapper {
-        gradleVersion = "5.3"
+        gradleVersion = "5.3.1"
         distributionType = Wrapper.DistributionType.ALL
     }
 
