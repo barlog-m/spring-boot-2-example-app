@@ -5,21 +5,21 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     application
     idea
-    kotlin("jvm") version "1.3.21"
+    kotlin("jvm") version "1.3.30"
 
-    id("org.springframework.boot") version "2.1.3.RELEASE"
+    id("org.springframework.boot") version "2.1.4.RELEASE"
     id("io.spring.dependency-management") version "1.0.7.RELEASE"
 
     // gradle dependencyUpdates -Drevision=release
     id("com.github.ben-manes.versions") version "0.21.0"
-    id("com.palantir.docker") version "0.21.0"
+    id("com.palantir.docker") version "0.22.0"
 }
 
 repositories {
     jcenter()
 }
 
-val kotlinLoggingVer = "1.6.25"
+val kotlinLoggingVer = "1.6.26"
 
 val javaxAnnotationApiVer = "1.3.2"
 val javaxTransactionApiVer = "1.3"
