@@ -9,7 +9,7 @@ services:
       MONGO_INITDB_DATABASE: app
 
   app:
-    image: reg-service/backend:latest
+    image: example/app:latest
     ports:
     - 8080:8080
     environment:

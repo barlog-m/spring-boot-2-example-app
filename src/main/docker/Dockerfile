@@ -1,4 +1,4 @@
-FROM openjdk:11-jre-slim
+FROM azul/zulu-openjdk-alpine:12
 
 LABEL maintainer="barlog@tanelorn.li"
 
