@@ -3,6 +3,7 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.gradle.plugins.ide.idea.model.IdeaLanguageLevel
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 
 plugins {
     application
@@ -59,6 +60,9 @@ dependencies {
 val appName = "app"
 val appVer by lazy { "0.0.1+${gitRev()}" }
 
+group = "example"
+version = appVer
+
 application {
     mainClassName = "app.AppKt"
     applicationName = appName
@@ -102,8 +106,10 @@ tasks {
     }
 
     withType(Test::class).configureEach {
-        maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).takeIf { it > 0 } ?: 1
+        maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2)
+            .takeIf { it > 0 } ?: 1
 
+        useJUnitPlatform()
         testLogging {
             showExceptions = true
             exceptionFormat = TestExceptionFormat.FULL
