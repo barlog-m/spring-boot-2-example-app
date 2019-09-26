@@ -1,3 +1,5 @@
+import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.gradle.plugins.ide.idea.model.IdeaLanguageLevel
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -5,26 +7,28 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     application
     idea
-    kotlin("jvm") version "1.3.30"
+    kotlin("jvm") version "1.3.50"
 
-    id("org.springframework.boot") version "2.1.4.RELEASE"
-    id("io.spring.dependency-management") version "1.0.7.RELEASE"
+    id("org.springframework.boot") version "2.1.8.RELEASE"
+    id("io.spring.dependency-management") version "1.0.8.RELEASE"
 
     // gradle dependencyUpdates -Drevision=release
-    id("com.github.ben-manes.versions") version "0.21.0"
-    id("com.palantir.docker") version "0.22.0"
+    id("com.github.ben-manes.versions") version "0.25.0"
+    id("com.palantir.docker") version "0.22.1"
 }
 
 repositories {
     jcenter()
 }
 
-val kotlinLoggingVer = "1.6.26"
+val javaVer = JavaVersion.VERSION_12
+
+val kotlinLoggingVer = "1.7.6"
 
 val javaxAnnotationApiVer = "1.3.2"
 val javaxTransactionApiVer = "1.3"
 
-val testContainersVer = "1.11.1"
+val testContainersVer = "1.12.2"
 val jfairyVer = "0.5.9"
 
 dependencies {
@@ -61,13 +65,13 @@ application {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = javaVer
+    targetCompatibility = javaVer
 }
 
 idea {
     project {
-        languageLevel = IdeaLanguageLevel(JavaVersion.VERSION_11)
+        languageLevel = IdeaLanguageLevel(javaVer)
     }
     module {
         isDownloadJavadoc = true
@@ -100,17 +104,28 @@ tasks {
     withType(Test::class).configureEach {
         maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).takeIf { it > 0 } ?: 1
 
-        useJUnitPlatform()
         testLogging {
-            events = setOf(TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED)
+            showExceptions = true
+            exceptionFormat = TestExceptionFormat.FULL
+            showStackTraces = true
+            showCauses = true
+            showStandardStreams = true
+            events = setOf(
+                TestLogEvent.PASSED,
+                TestLogEvent.SKIPPED,
+                TestLogEvent.FAILED,
+                TestLogEvent.STANDARD_OUT,
+                TestLogEvent.STANDARD_ERROR
+            )
         }
 
         reports.html.isEnabled = false
-        reports.junitXml.isEnabled = false
+
+        useJUnitPlatform()
     }
 
     wrapper {
-        gradleVersion = "5.3.1"
+        gradleVersion = "5.6.2"
         distributionType = Wrapper.DistributionType.ALL
     }
 
@@ -130,26 +145,62 @@ tasks {
     docker {
         val build = build.get()
         val bootJar = bootJar.get()
+        val dockerImageName = "${project.group}/$appName"
 
         dependsOn(build)
 
-        name = "${project.group}/${bootJar.archiveBaseName.get()}".toLowerCase()
+        name = "$dockerImageName:latest"
+        tag("current", "$dockerImageName:$appVer")
+        tag("latest", "$dockerImageName:latest")
         files(bootJar.archiveFile)
         setDockerfile(file("$projectDir/src/main/docker/Dockerfile"))
-        buildArgs(mapOf(
-            "JAR_FILE" to bootJar.archiveFileName.get(),
-            "JAVA_OPTS" to "-XX:-TieredCompilation",
-            "PORT" to "8080"
-        ))
+        buildArgs(
+            mapOf(
+                "JAR_FILE" to bootJar.archiveFileName.get()
+            )
+        )
         pull(true)
     }
 
     register("stage") {
         dependsOn("build", "clean")
     }
+
+    register<Delete>("cleanOut") {
+        delete("out")
+    }
+
+    clean {
+        dependsOn("cleanOut")
+    }
+
+    withType(DependencyUpdatesTask::class) {
+        resolutionStrategy {
+            componentSelection {
+                all {
+                    val rejected = listOf(
+                        "alpha", "beta", "rc", "cr", "m",
+                        "preview", "b", "ea", "eap"
+                    ).any { q ->
+                        candidate.version.matches(
+                            Regex("(?i).*[.-]$q[.\\d-+]*")
+                        )
+                    }
+                    if (rejected) {
+                        reject("Release candidate")
+                    }
+                }
+            }
+        }
+
+        checkForGradleUpdate = true
+        outputFormatter = "json"
+        outputDir = "build/dependencyUpdates"
+        reportfileName = "report"
+    }
 }
 
-fun gitRev() = ProcessBuilder("git", "rev-parse", "HEAD").start().let { process ->
-    process.waitFor(100, TimeUnit.MILLISECONDS)
-    process.inputStream.bufferedReader().readLine() ?: "none"
+fun gitRev() = ProcessBuilder("git", "rev-parse", "--short", "HEAD").start().let { p ->
+    p.waitFor(100, TimeUnit.MILLISECONDS)
+    p.inputStream.bufferedReader().readLine() ?: "none"
 }
