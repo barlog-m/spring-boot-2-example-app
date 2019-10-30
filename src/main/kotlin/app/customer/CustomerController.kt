@@ -19,25 +19,25 @@ import reactor.core.publisher.Mono
 class CustomerController(
     private val service: CustomerService
 ) {
-    @PostMapping(consumes = [MediaType.APPLICATION_JSON_UTF8_VALUE])
+    @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
     fun create(@RequestBody customer: Customer): Mono<String> =
         service.save(customer)
 
     @GetMapping(
         path = ["/{id}"],
-        produces = [MediaType.APPLICATION_JSON_UTF8_VALUE]
+        produces = [MediaType.APPLICATION_JSON_VALUE]
     )
     fun readById(@PathVariable id: ObjectId): Mono<Customer> =
         service.findById(id.toHexString())
 
     @GetMapping(
         path = ["/by"],
-        produces = [MediaType.APPLICATION_JSON_UTF8_VALUE]
+        produces = [MediaType.APPLICATION_JSON_VALUE]
     )
     fun readByName(@RequestParam name: String): Flux<Customer> =
         service.findByName(name)
 
-    @PutMapping(consumes = [MediaType.APPLICATION_JSON_UTF8_VALUE])
+    @PutMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
     fun update(@RequestBody customer: Customer): Mono<String> =
         service.save(customer)
 

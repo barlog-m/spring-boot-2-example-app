@@ -9,11 +9,11 @@ plugins {
     idea
     kotlin("jvm") version "1.3.50"
 
-    id("org.springframework.boot") version "2.1.8.RELEASE"
+    id("org.springframework.boot") version "2.2.0.RELEASE"
     id("io.spring.dependency-management") version "1.0.8.RELEASE"
 
     // gradle dependencyUpdates -Drevision=release
-    id("com.github.ben-manes.versions") version "0.25.0"
+    id("com.github.ben-manes.versions") version "0.27.0"
     id("com.palantir.docker") version "0.22.1"
 }
 
@@ -28,7 +28,7 @@ val kotlinLoggingVer = "1.7.6"
 val javaxAnnotationApiVer = "1.3.2"
 val javaxTransactionApiVer = "1.3"
 
-val testContainersVer = "1.12.2"
+val testContainersVer = "1.12.3"
 val jfairyVer = "0.5.9"
 
 dependencies {
@@ -130,7 +130,7 @@ tasks {
     }
 
     wrapper {
-        gradleVersion = "5.6.2"
+        gradleVersion = "5.6.3"
         distributionType = Wrapper.DistributionType.ALL
     }
 

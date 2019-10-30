@@ -39,7 +39,7 @@ class CustomerControllerTest {
         webClient
             .get()
             .uri("/customer/${customer.id}")
-            .accept(MediaType.APPLICATION_JSON_UTF8)
+            .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk
             .kExpectBody<Customer>()
@@ -59,7 +59,7 @@ class CustomerControllerTest {
                     .queryParam("name", URLEncoder.encode(customer.name, "UTF-8"))
                     .build()
             }
-            .accept(MediaType.APPLICATION_JSON_UTF8)
+            .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk
             .kExpectBodyList<Customer>()
@@ -74,8 +74,8 @@ class CustomerControllerTest {
         webClient
             .post()
             .uri("/customer")
-            .contentType(MediaType.APPLICATION_JSON_UTF8)
-            .body(BodyInserters.fromObject(customer))
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(BodyInserters.fromValue(customer))
             .exchange()
             .expectStatus().isOk
             .kExpectBody<String>()
@@ -90,8 +90,8 @@ class CustomerControllerTest {
         webClient
             .put()
             .uri("/customer")
-            .contentType(MediaType.APPLICATION_JSON_UTF8)
-            .body(BodyInserters.fromObject(customer))
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(BodyInserters.fromValue(customer))
             .exchange()
             .expectStatus().isOk
             .kExpectBody<String>()

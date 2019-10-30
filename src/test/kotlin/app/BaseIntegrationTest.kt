@@ -14,6 +14,7 @@ import org.springframework.context.ApplicationListener
 import org.springframework.context.event.ContextClosedEvent
 import org.springframework.test.context.ContextConfiguration
 import org.testcontainers.containers.GenericContainer
+import org.testcontainers.containers.wait.strategy.LogMessageWaitStrategy
 
 @SpringBootTest(
     classes = [ITConfig::class],
@@ -36,6 +37,7 @@ abstract class BaseIntegrationTest {
         private val mongoContainer: KGenericContainer =
             KGenericContainer("mongo:latest")
                 .withExposedPorts(MONGO_PORT)
+                .waitingFor(LogMessageWaitStrategy().withRegEx(".*waiting for connections on port 27017\n"))
     }
 
     class Initializer : ApplicationContextInitializer<ConfigurableApplicationContext> {

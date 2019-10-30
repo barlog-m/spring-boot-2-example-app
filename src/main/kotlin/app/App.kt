@@ -7,7 +7,5 @@ import org.springframework.boot.runApplication
 open class App
 
 fun main(vararg args: String) {
-    runApplication<App>(*args) {
-        setRegisterShutdownHook(true)
-    }
+    runApplication<App>(*args)
 }

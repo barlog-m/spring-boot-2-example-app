@@ -1,5 +1,7 @@
 spring:
-  main.banner-mode: "off"
+  main:
+    banner-mode: off
+    lazy-initialization: true
   application.name: app
   output.ansi.enabled: always
   jmx.enabled: false
@@ -32,4 +34,5 @@ logging:
   pattern:
     level: "%clr(%-5p)"
     console: "%date{yyyy.MM.dd HH:mm:ss.SSS} ${LOG_LEVEL_PATTERN} %clr([%thread]){magenta} %clr(%logger{-1}){cyan}->%clr(%method){blue}: %m%n${LOG_EXCEPTION_CONVERSION_WORD:%wEx}"
+  register-shutdown-hook: true
   level.root: INFO
