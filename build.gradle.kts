@@ -9,7 +9,7 @@ plugins {
     idea
     kotlin("jvm") version "1.3.50"
 
-    id("org.springframework.boot") version "2.2.0.RELEASE"
+    id("org.springframework.boot") version "2.2.1.RELEASE"
     id("io.spring.dependency-management") version "1.0.8.RELEASE"
 
     // gradle dependencyUpdates -Drevision=release
@@ -21,7 +21,7 @@ repositories {
     jcenter()
 }
 
-val javaVer = JavaVersion.VERSION_12
+val javaVer = JavaVersion.VERSION_11
 
 val kotlinLoggingVer = "1.7.6"
 
@@ -130,7 +130,7 @@ tasks {
     }
 
     wrapper {
-        gradleVersion = "5.6.3"
+        gradleVersion = "6.0"
         distributionType = Wrapper.DistributionType.ALL
     }
 
