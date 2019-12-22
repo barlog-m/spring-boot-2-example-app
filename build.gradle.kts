@@ -7,9 +7,9 @@ import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 plugins {
     application
     idea
-    kotlin("jvm") version "1.3.50"
+    kotlin("jvm") version "1.3.61"
 
-    id("org.springframework.boot") version "2.2.1.RELEASE"
+    id("org.springframework.boot") version "2.2.2.RELEASE"
     id("io.spring.dependency-management") version "1.0.8.RELEASE"
 
     // gradle dependencyUpdates -Drevision=release
@@ -23,12 +23,12 @@ repositories {
 
 val javaVer = JavaVersion.VERSION_11
 
-val kotlinLoggingVer = "1.7.6"
+val kotlinLoggingVer = "1.7.8"
 
 val javaxAnnotationApiVer = "1.3.2"
 val javaxTransactionApiVer = "1.3"
 
-val testContainersVer = "1.12.3"
+val testContainersVer = "1.12.4"
 val jfairyVer = "0.5.9"
 
 dependencies {
