@@ -7,28 +7,29 @@ import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 plugins {
     application
     idea
-    kotlin("jvm") version "1.3.61"
+    kotlin("jvm") version "1.3.72"
 
-    id("org.springframework.boot") version "2.2.2.RELEASE"
-    id("io.spring.dependency-management") version "1.0.8.RELEASE"
+    id("org.springframework.boot") version "2.3.1.RELEASE"
+    id("io.spring.dependency-management") version "1.0.9.RELEASE"
 
     // gradle dependencyUpdates -Drevision=release
-    id("com.github.ben-manes.versions") version "0.27.0"
-    id("com.palantir.docker") version "0.22.1"
+    id("com.github.ben-manes.versions") version "0.28.0"
+    id("com.palantir.docker") version "0.25.0"
 }
 
 repositories {
     jcenter()
+    mavenCentral()
 }
 
 val javaVer = JavaVersion.VERSION_11
 
-val kotlinLoggingVer = "1.7.8"
+val kotlinLoggingVer = "1.7.10"
 
 val javaxAnnotationApiVer = "1.3.2"
 val javaxTransactionApiVer = "1.3"
 
-val testContainersVer = "1.12.4"
+val testContainersVer = "1.14.3"
 val jfairyVer = "0.5.9"
 
 dependencies {
@@ -130,7 +131,7 @@ tasks {
     }
 
     wrapper {
-        gradleVersion = "6.0"
+        gradleVersion = "6.5"
         distributionType = Wrapper.DistributionType.ALL
     }
 
@@ -147,6 +148,7 @@ tasks {
         }
     }
 
+    //gradle docker -PremoteDebug
     docker {
         val build = build.get()
         val bootJar = bootJar.get()
@@ -159,11 +161,10 @@ tasks {
         tag("latest", "$dockerImageName:latest")
         files(bootJar.archiveFile)
         setDockerfile(file("$projectDir/src/main/docker/Dockerfile"))
-        buildArgs(
-            mapOf(
-                "JAR_FILE" to bootJar.archiveFileName.get()
-            )
-        )
+        buildArgs(mapOf(
+            "JAR_FILE" to bootJar.archiveFileName.get(),
+            "JAVA_OPTS" to dockerJavaOpts(project)
+        ))
         pull(true)
     }
 
@@ -208,4 +209,15 @@ tasks {
 fun gitRev() = ProcessBuilder("git", "rev-parse", "--short", "HEAD").start().let { p ->
     p.waitFor(100, TimeUnit.MILLISECONDS)
     p.inputStream.bufferedReader().readLine() ?: "none"
+}
+
+fun dockerJavaOpts(project: Project): String {
+    val baseOpts = "-XX:-TieredCompilation -XX:MaxRAMPercentage=80"
+
+    if (project.hasProperty("remoteDebug")) {
+        project.logger.lifecycle("WARNING: Remote Debugging Enabled!")
+        return "$baseOpts -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+    }
+
+    return baseOpts
 }
