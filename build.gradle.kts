@@ -46,15 +46,13 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
-        exclude(group = "junit", module = "junit")
+        exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
     }
     testImplementation("io.projectreactor:reactor-test")
     testImplementation("org.testcontainers:testcontainers:$testContainersVer")
     testImplementation("io.codearte.jfairy:jfairy:$jfairyVer")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-params")
 }
 
 val appName = "app"
